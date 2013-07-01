@@ -20,11 +20,11 @@ class Configuration implements ConfigurationInterface
     public function getConfigTreeBuilder()
     {
         $treeBuilder = new TreeBuilder();
-        $rootNode = $treeBuilder->root('webfish_mailer');
+        $rootNode = $treeBuilder->root('happyr_mailer');
 
         $rootNode
           ->children()
-            ->scalarNode('class')->defaultValue('Webfish\MailerBundle\Util\Mailer')->cannotBeEmpty()->end()
+            ->scalarNode('class')->defaultValue('HappyR\MailerBundle\Services\MailerService')->cannotBeEmpty()->end()
             ->arrayNode('from')
               ->addDefaultsIfNotSet()
               ->children()
