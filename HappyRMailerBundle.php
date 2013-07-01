@@ -1,6 +1,6 @@
 <?php
 
-namespace Webfish\MailerBundle;
+namespace HappyR\MailerBundle;
 
 use Symfony\Component\HttpKernel\Bundle\Bundle;
 

@@ -1,6 +1,7 @@
 parameters:
+  happyr_mailer.user_class: HappyR\MailerBundle\Services\MailerService.php
 
 services:
-    webfish.mailer:
-        class: %happyr_mailer.user_class%
-        arguments: [@mailer,@templating,{'name':%happyr_mailer.from.name%,'email':%happyr_mailer.from.email%,'session':@session}]
+  happyr.mailer:
+    class: %happyr_mailer.user_class%
+    arguments: [@mailer,@templating,{'name':%happyr_mailer.from.name%,'email':%happyr_mailer.from.email%}]

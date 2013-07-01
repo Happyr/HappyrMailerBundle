@@ -1,6 +1,6 @@
 <?php 
 
-namespace Webfish\MailerBundle\Util;
+namespace HappyR\MailerBundle\Util;
 
 
 use Symfony\Bundle\FrameworkBundle\Templating\EngineInterface;
@@ -40,7 +40,7 @@ class Mailer{
 			unset($parameters['attachments']);
 		}
 
-        //fake an request
+        //fake an request to be able to use twig functions like asset
         $this->getContainer()->enterScope('request');
         $this->getContainer()->set('request', new Request(), 'request');
 		

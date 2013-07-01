@@ -11,62 +11,23 @@ about SwiftMailer, refer to the [Symfony documentation](http://symfony.com/doc/c
 
 ## Installation
 
-1. Download HappyRMailerBundle
-2. Configure the Autoloader
-3. Enable the Bundle
-4. Configure the bundle with config.yml
-5. Create your Mailer class (optional)
+1. Install HappyRMailerBundle
+2. Enable the Bundle
+3. Configure the bundle with config.yml
+4. Create your Mailer class (optional)
 
 
-### Step 1: Download HappyRMailerBundle
+### Step 1: Install HappyRMailerBundle
 
-Ultimately, the HappyRMailerBundle files should be downloaded to the
-`vendor/bundles/HappyR/MalerBundle` directory.
+Use composer to install the bundle.
 
-This can be done in several ways, depending on your preference. The first
-method is the standard Symfony2 method.
 
-**Using the vendors script**
-
-Add the following lines in your `deps` file:
-
-``` ini
-[HappyRMailerBundle]
-    git=git://github.com/Nyholm/HappyRMailerBundle.git
-    target=bundles/HappyR/MailerBundle
-
+``` composer
+composer require happyr/happyr-mailer-bundle
 ```
 
-Now, run the vendors script to download the bundle:
 
-``` bash
-$ php bin/vendors install
-```
-
-**Using submodules**
-
-If you prefer instead to use git submodules, then run the following:
-
-``` bash
-$ git submodule add git://github.com/Nyholm/HappyRMailerBundle.git vendor/bundles/HappyR/MailerBundle
-$ git submodule update --init
-```
-
-### Step 2: Configure the Autoloader
-
-Add the `HappyR` namespace to your autoloader:
-
-``` php
-<?php
-// app/autoload.php
-
-$loader->registerNamespaces(array(
-    // ...
-    'HappyR' => __DIR__.'/../vendor/bundles',
-));
-```
-
-### Step 3: Enable the bundle
+### Step 2: Enable the bundle
 
 Finally, enable the bundle in the kernel:
 
@@ -84,14 +45,14 @@ public function registerBundles()
 ```
 
 
-### Step 4: Configure the HappyRMailerBundle
+### Step 3: Configure the HappyRMailerBundle
 
-This is the default configuration. Every field is optional but it is recommended that you specify them all. Add the following configuration to your `config.yml`
+This is the default configuration. Every field is optional but it is recommended that you specify them all.
+Add the following configuration to your `config.yml`
 
 ``` yaml
 # app/config/config.yml
 happyr_mailer:
-    class: HappyR\MailerBundle\Util\Mailer
     from:
         email: webmaster@example.com
         name: webmaster
@@ -111,38 +72,33 @@ public function anyAction(){
 
 ```
 
-### Step 5: Create your Mailer class (optional)
+### Step 4: Create your Mailer class (optional)
 
 To make it eaven esier to send mail from your application it is recommended that 
 you extend the HappyRMailer class. Refer to this example class:
-
-**Warning:**
-
-> If you override the __construct() method in your User class, be sure
-> to call parent::__construct(), as the base User class depends on
-> this to initialize some fields.
 
 
 ``` php
 <?php
 // src/Any/ContentBundle/Util/Mailer.php
 
-namespace Any\ContentBundle\Util;
+namespace Any\ContentBundle\Services;
 
-use HappyR\MailerBundle\Util\Mailer as BaseMailer;
 use Symfony\Bundle\FrameworkBundle\Templating\EngineInterface;
 use Symfony\Component\Routing\RouterInterface;
 
 
-class Mailer extends BaseMailer
+class Mailer
 {
-	 
+
+	 private $happyrMailer;
+
 	/**
-	 * If you need a constructor use this code. Or else you may omit it completly.
+	 * A constructor that takes the HappyR mailer as a parameter
 	 */
-	public function __construct(\Swift_Mailer $mailer, RouterInterface $router, EngineInterface $templating, array $parameters)
+	public function __construct($happyrMailer)
 	{
-		parent::__construct($mailer,$router, $templating, $parameters);
+		$this->happyrMailer=$happyrMailer;
 	}
 
 
@@ -150,17 +106,14 @@ class Mailer extends BaseMailer
      * Send a thank you mail to user
      * @param User $user
      */
-    public function sendThankYouMail($user){
- 	//user is a object in my application
+    public function sendThankYouMail(User $user){
+ 	    //user is a object in my application
 	
-	//you may choose template with $this->locale
-        $template='AnyContentBundle:Email:'.$this->locale.'/thank_you.html.twig';
-
-        //generate a url to something..
-        $specialUrl=$this->router->generate('specual_route',array(),true);
+	    //you may choose template with $this->locale
+        $template='AnyContentBundle:Email:thank_you.html.twig';
 
         //send the email
-        $this->send($user->getMail(), $template, array('user'=>$user,'special_url'=>$specialUrl));
+        $this->happyrMailer->send($user->getMail(), $template, array('user'=>$user));
     }
 }
 ```
@@ -179,7 +132,7 @@ Any/ContentBundle/Email/en/thank_you.html.twig
 
 {% block body %}
 
-<p>Thank you {{user.name}} for doing <b>that thing</b>.. Please visit <a href="{{special_url}}">this page</a> to get your reward.</p>
+<p>Thank you {{user.name}} for doing <b>that thing</b>... </p>
 
 <p>//Webmaster</p>
 
@@ -187,14 +140,13 @@ Any/ContentBundle/Email/en/thank_you.html.twig
 
 ```
 
-You need to change the config.yml to use your class.
+You need to change the services.yml in your bundle.
 ``` yaml
-# app/config/config.yml
-happyr_mailer:
-    class: Any\ContentBundle\Util\Mailer
-    from:
-        email: webmaster@example.com
-        name: webmaster
+# Any/ContentBundle/Resources/config/services.yml
+services:
+  my.mailer:
+    class: Any\ContentBundle\Services\Mailer
+    arguments: [@happyr.mailer]
 
 ```
 
@@ -203,7 +155,7 @@ happyr_mailer:
 **Attachments:**
 If you want to send attachments you need to add them the the parameters array.
 ``` php
-$this->send($mail, $template, array('special_url'=>$specialUrl, 'attachments'=>
+$this->send($mail, $template, array('user'=>$user, 'attachments'=>
 				array(
 						'/absolute/path/to/file'=>'content-type',
 						'/absolute/path/to/other/file'=>null, //write null to not specify the content type
