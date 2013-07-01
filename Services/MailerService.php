@@ -1,6 +1,6 @@
 <?php
 
-namespace HappyR\MailerBundle\Util;
+namespace HappyR\MailerBundle\Services;
 
 use Symfony\Bundle\FrameworkBundle\Templating\EngineInterface;
 use Symfony\Component\Routing\RouterInterface;
