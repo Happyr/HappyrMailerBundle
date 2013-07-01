@@ -1,0 +1,34 @@
+{
+    "name": "happyr/mailer-bundle",
+    "type": "symfony-bundle",
+    "description": "HappyR MailerBundle lets you send nice HTML emails. Use a twig template to design your emails. You may even use attachments. ",
+    "keywords": ["Mail management", "Mail", "HTML"],
+    "homepage": "http://developer.happyr.se",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Tobias Nyholm",
+            "email": "tobias@happyrecruiting.se"
+        }
+    ],
+    "minimum-stability": "dev",
+    "require": {
+        "php": ">=5.3.2",
+        "symfony/framework-bundle": ">=2.0,<2.3-dev"
+    },
+    "require-dev": {
+        "twig/twig": "*",
+        "swiftmailer/swiftmailer": "*",
+        "symfony/yaml": "2.1.*",
+        "symfony/validator": "2.1.*"
+    },
+    "autoload": {
+        "psr-0": { "HappyR\\MailerBundle": "" }
+    },
+    "target-dir": "HappyR/MailerBundle",
+     "extra": {
+        "branch-alias": {
+            "dev-master": "1.2.0-dev"
+        }
+    }
+}

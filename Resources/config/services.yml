@@ -1,0 +1,6 @@
+parameters:
+
+services:
+    webfish.mailer:
+        class: %happyr_mailer.user_class%
+        arguments: [@mailer,@templating,{'name':%happyr_mailer.from.name%,'email':%happyr_mailer.from.email%,'session':@session}]
