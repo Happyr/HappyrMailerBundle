@@ -19,6 +19,8 @@ class Mailer{
 	protected $parameters;
 
     /**
+     * Constructor
+     * 
      * @param \Swift_Mailer $mailer
      * @param EngineInterface $templating
      * @param array $parameters
@@ -63,5 +65,4 @@ class Mailer{
 		
 		return $this->mailer->send($message);
 	}
-	
 }
