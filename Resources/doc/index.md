@@ -52,7 +52,7 @@ Add the following configuration to your `config.yml`
 
 ``` yaml
 # app/config/config.yml
-happyr_mailer:
+happy_r_mailer:
     from:
         email: webmaster@example.com
         name: webmaster
