@@ -23,7 +23,7 @@ Use composer to install the bundle.
 
 
 ``` composer
-composer require happyr/happyr-mailer-bundle
+composer require happyr/mailer-bundle:1.0.*
 ```
 
 
