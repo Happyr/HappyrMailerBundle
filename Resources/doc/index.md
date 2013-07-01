@@ -1,7 +1,7 @@
-Webfish Mailer Bundle
+HappyR Mailer Bundle
 ==================================
 
-Webfish Mailer Bundle makes it easier to send HTML emails. 
+HappyR Mailer Bundle makes it easier to send HTML emails. 
 
 ## Prerequisites
 
@@ -11,17 +11,17 @@ about SwiftMailer, refer to the [Symfony documentation](http://symfony.com/doc/c
 
 ## Installation
 
-1. Download WebfishMailerBundle
+1. Download HappyRMailerBundle
 2. Configure the Autoloader
 3. Enable the Bundle
 4. Configure the bundle with config.yml
 5. Create your Mailer class (optional)
 
 
-### Step 1: Download WebfishMailerBundle
+### Step 1: Download HappyRMailerBundle
 
-Ultimately, the WebfishMailerBundle files should be downloaded to the
-`vendor/bundles/Webfish/MalerBundle` directory.
+Ultimately, the HappyRMailerBundle files should be downloaded to the
+`vendor/bundles/HappyR/MalerBundle` directory.
 
 This can be done in several ways, depending on your preference. The first
 method is the standard Symfony2 method.
@@ -31,9 +31,9 @@ method is the standard Symfony2 method.
 Add the following lines in your `deps` file:
 
 ``` ini
-[WebfishMailerBundle]
-    git=git://github.com/Nyholm/WebfishMailerBundle.git
-    target=bundles/Webfish/MailerBundle
+[HappyRMailerBundle]
+    git=git://github.com/Nyholm/HappyRMailerBundle.git
+    target=bundles/HappyR/MailerBundle
 
 ```
 
@@ -48,13 +48,13 @@ $ php bin/vendors install
 If you prefer instead to use git submodules, then run the following:
 
 ``` bash
-$ git submodule add git://github.com/Nyholm/WebfishMailerBundle.git vendor/bundles/Webfish/MailerBundle
+$ git submodule add git://github.com/Nyholm/HappyRMailerBundle.git vendor/bundles/HappyR/MailerBundle
 $ git submodule update --init
 ```
 
 ### Step 2: Configure the Autoloader
 
-Add the `Webfish` namespace to your autoloader:
+Add the `HappyR` namespace to your autoloader:
 
 ``` php
 <?php
@@ -62,7 +62,7 @@ Add the `Webfish` namespace to your autoloader:
 
 $loader->registerNamespaces(array(
     // ...
-    'Webfish' => __DIR__.'/../vendor/bundles',
+    'HappyR' => __DIR__.'/../vendor/bundles',
 ));
 ```
 
@@ -78,27 +78,27 @@ public function registerBundles()
 {
     $bundles = array(
         // ...
-        new Webfish\MailerBundle\WebfishMailerBundle(),
+        new HappyR\MailerBundle\HappyRMailerBundle(),
     );
 }
 ```
 
 
-### Step 4: Configure the WebfishMailerBundle
+### Step 4: Configure the HappyRMailerBundle
 
 This is the default configuration. Every field is optional but it is recommended that you specify them all. Add the following configuration to your `config.yml`
 
 ``` yaml
 # app/config/config.yml
 happyr_mailer:
-    class: Webfish\MailerBundle\Util\Mailer
+    class: HappyR\MailerBundle\Util\Mailer
     from:
         email: webmaster@example.com
         name: webmaster
 
 ```
 
-You can now use the Webfish Mailer like:
+You can now use the HappyR Mailer like:
 ``` php
 <?php
 // AnyController.php
@@ -114,7 +114,7 @@ public function anyAction(){
 ### Step 5: Create your Mailer class (optional)
 
 To make it eaven esier to send mail from your application it is recommended that 
-you extend the WebfishMailer class. Refer to this example class:
+you extend the HappyRMailer class. Refer to this example class:
 
 **Warning:**
 
@@ -129,7 +129,7 @@ you extend the WebfishMailer class. Refer to this example class:
 
 namespace Any\ContentBundle\Util;
 
-use Webfish\MailerBundle\Util\Mailer as BaseMailer;
+use HappyR\MailerBundle\Util\Mailer as BaseMailer;
 use Symfony\Bundle\FrameworkBundle\Templating\EngineInterface;
 use Symfony\Component\Routing\RouterInterface;
 
@@ -165,12 +165,12 @@ class Mailer extends BaseMailer
 }
 ```
 
-The twig template should inherit WebfishMailerBundle::base.html.twig. There is 3 blocks: subject, head and body.
+The twig template should inherit HappyRMailerBundle::base.html.twig. There is 3 blocks: subject, head and body.
 This is a example template:
 Any/ContentBundle/Email/en/thank_you.html.twig
 ``` twig
 {# AnyContentBundle:Email:en/thank_you.html.twig #}
-{% extends "WebfishMailerBundle::base.html.twig" %}
+{% extends "HappyRMailerBundle::base.html.twig" %}
 
 {# This is the email subject #}
 {% block subject %}Thank you{% endblock subject %}
