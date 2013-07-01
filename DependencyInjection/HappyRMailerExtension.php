@@ -21,13 +21,13 @@ class HappyRMailerExtension extends Extension
     {
         $configuration = new Configuration();
         $config = $this->processConfiguration($configuration, $configs);
-       
+
         $loader = new Loader\YamlFileLoader($container, new FileLocator(__DIR__.'/../Resources/config'));
         $loader->load('services.yml');
 
         $container->setParameter('happyr_mailer.user_class', $config['class']);
         $container->setParameter('happyr_mailer.from.email', $config['from']['email']);
         $container->setParameter('happyr_mailer.from.name', $config['from']['name']);
-        
+
     }
 }
