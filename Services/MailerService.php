@@ -10,7 +10,7 @@ use Symfony\Component\HttpFoundation\Request;
 
 /**
  * Mailer class to be exteded by your application
- * @author Webfish
+ *
  *
  */
 class Mailer{
@@ -18,8 +18,13 @@ class Mailer{
 	protected $mailer;
 	protected $templating;
 	protected $parameters;
-	
-	public function __construct(\Swift_Mailer $mailer, EngineInterface $templating, array $parameters)
+
+    /**
+     * @param \Swift_Mailer $mailer
+     * @param EngineInterface $templating
+     * @param array $parameters
+     */
+    public function __construct(\Swift_Mailer $mailer, EngineInterface $templating, array $parameters)
 	{
 		$this->mailer = $mailer;
 		$this->templating = $templating;
@@ -40,11 +45,6 @@ class Mailer{
 			unset($parameters['attachments']);
 		}
 
-        //fake an request to be able to use twig functions like asset
-        $this->getContainer()->enterScope('request');
-        $this->getContainer()->set('request', new Request(), 'request');
-		
-		
 		$renderedTemplate = $this->templating->render($template, $parameters);
 		
 		// Render the email, use the first line as the subject, and the rest as the body
