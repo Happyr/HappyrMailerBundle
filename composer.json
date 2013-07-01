@@ -32,6 +32,6 @@
         }
     },
     "replace":{
-        "webfish/mailer-bundle":"1.2.0.*@dev"
+        "webfish/mailer-bundle":"1.2.*"
     }
 }
