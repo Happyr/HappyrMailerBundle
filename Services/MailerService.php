@@ -4,8 +4,7 @@ namespace HappyR\MailerBundle\Services;
 
 use Symfony\Bundle\FrameworkBundle\Templating\EngineInterface;
 use Symfony\Component\Routing\RouterInterface;
-use Symfony\Component\HttpFoundation\Request;
-
+use Swift_Mailer;
 
 /**
  * Class MailerService
@@ -38,11 +37,11 @@ class MailerService
     /**
      * Constructor
      *
-     * @param \Swift_Mailer $mailer
+     * @param Swift_Mailer $mailer
      * @param EngineInterface $templating
      * @param array $parameters
      */
-    public function __construct(\Swift_Mailer $mailer, EngineInterface $templating, array $parameters)
+    public function __construct(Swift_Mailer $mailer, EngineInterface $templating, array $parameters)
     {
         $this->mailer = $mailer;
         $this->templating = $templating;
