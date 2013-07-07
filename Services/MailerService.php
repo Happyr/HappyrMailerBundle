@@ -8,15 +8,31 @@ use Symfony\Component\HttpFoundation\Request;
 
 
 /**
- * Mailer class to be exteded by your application
+ * Class MailerService
  *
- *
+ * This mailer renders a template and send the email
  */
 class MailerService
 {
-
+    /**
+     * @var \Swift_Mailer mailer
+     *
+     *
+     */
     protected $mailer;
+
+    /**
+     * @var \Symfony\Bundle\FrameworkBundle\Templating\EngineInterface templating
+     *
+     *
+     */
     protected $templating;
+
+    /**
+     * @var array parameters
+     *
+     *
+     */
     protected $parameters;
 
     /**
@@ -49,23 +65,30 @@ class MailerService
             unset($parameters['attachments']);
         }
 
+        //Render the template
         $renderedTemplate = $this->templating->render($template, $parameters);
 
-        // Render the email, use the first line as the subject, and the rest as the body
+        /*
+         * Use the first line as the subject, and the rest as the body
+         */
         $renderedLines = explode("\n", trim($renderedTemplate));
         $subject = $renderedLines[0];
         $body = implode("\n", array_slice($renderedLines, 1));
 
+
+        //Create the message
         $message = \Swift_Message::newInstance()
             ->setSubject($subject)
             ->setFrom($this->parameters['email'],$this->parameters['name'])
             ->setTo($toEmail)
             ->setBody($body,'text/html','utf-8');
 
+        //Add the attachments
         foreach($attachments as $path=>$contentType){
             $message->attach(\Swift_Attachment::fromPath($path,$contentType));
         }
 
+        //send it
         return $this->mailer->send($message);
     }
 }
