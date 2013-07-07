@@ -16,6 +16,7 @@ class MailerServiceTest extends \PHPUnit_Framework_TestCase
     /**
      * Test the send function
      *
+     * @return void
      */
     public function testSend()
     {
