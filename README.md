@@ -89,8 +89,17 @@ If you want to send attachments you need to add them the the parameters array.
 ``` php
     $this->send($mail, $template, array('user'=>$user, 'attachments'=>
 	array(
-		'/absolute/path/to/file'=>'content-type',
-		'/absolute/path/to/other/file'=>null, //write null to not specify the content type
+		//two attachments. You must specify either 'data' or 'path'
+		array(
+			'data'=>$bindaryPdf,
+		    'contentType'=>'application/pdf',
+		    'filename'=>'Invoice.pdf',
+		),
+		array(
+			'path'=>$pathToPdf,
+		    'contentType'=>'application/pdf',
+		    'filename'=>'Welcome.pdf',
+		),
 	)));
 
 ```
