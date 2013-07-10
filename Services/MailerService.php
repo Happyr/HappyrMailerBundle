@@ -5,7 +5,7 @@ namespace HappyR\MailerBundle\Services;
 use Symfony\Bundle\FrameworkBundle\Templating\EngineInterface;
 use Symfony\Component\Routing\RouterInterface;
 use Swift_Mailer;
-
+use Swift_Attachment;
 /**
  * Class MailerService
  *
@@ -82,12 +82,54 @@ class MailerService
             ->setTo($toEmail)
             ->setBody($body,'text/html','utf-8');
 
-        //Add the attachments
-        foreach($attachments as $path=>$contentType){
-            $message->attach(\Swift_Attachment::fromPath($path,$contentType));
-        }
+        $this->prepareAttachments($message,$attachments);
+
 
         //send it
         return $this->mailer->send($message);
+    }
+
+    /**
+     * Prepare the attachments and add those to the message
+     *
+     * @param $message
+     * @param $attachments
+     *
+     */
+    protected function prepareAttachments(&$message, &$attachments)
+    {
+        //prepare an array with defaults
+        $defaults=array(
+            'data'=>null,
+            'path'=>null,
+            'contentType'=>null,
+            'filename'=>null,
+        );
+
+
+        //For each attachment
+        foreach($attachments as $key=>$file){
+            if(!is_array($file)){
+                trigger_error('HappyRMailerBundle: The way you add attachments are depricated. '.
+                'See http://developer.happyr.se how you should add attachments.', E_USER_DEPRECATED );
+
+                $message->attach(Swift_Attachment::fromPath($key, $file));
+                continue;
+            }
+
+            $file=array_merge($defaults ,$file);
+            $attachment=new Swift_Attachment($file['data'],$file['filename'],$file['contentType']);
+
+            if($file['data']==null){
+               //fetch from path
+                $attachment->setFile(
+                    new \Swift_ByteStream_FileByteStream($file['path']),
+                    $file['contentType']
+                );
+            }
+
+            //add it to the mail
+            $message->attach($attachment);
+        }
     }
 }
