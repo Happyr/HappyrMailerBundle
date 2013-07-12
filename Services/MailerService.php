@@ -92,11 +92,11 @@ class MailerService
     /**
      * Prepare the attachments and add those to the message
      *
-     * @param $message
-     * @param $attachments
+     * @param Swift_Message &$message
+     * @param array &$attachments
      *
      */
-    protected function prepareAttachments(&$message, &$attachments)
+    protected function prepareAttachments(&$message, array &$attachments)
     {
         //prepare an array with defaults
         $defaults=array(
@@ -121,7 +121,7 @@ class MailerService
             $attachment=new Swift_Attachment($file['data'],$file['filename'],$file['contentType']);
 
             if($file['data']==null){
-               //fetch from path
+                //fetch from path
                 $attachment->setFile(
                     new \Swift_ByteStream_FileByteStream($file['path']),
                     $file['contentType']
