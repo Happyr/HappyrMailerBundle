@@ -28,7 +28,7 @@ Install it with Composer!
     // ...
     require: {
         // ...
-        "happyr/google-analytics-bundle": "1.0.*",
+        "happyr/mailer-bundle": "1.2.*",
     }
 }
 ```
