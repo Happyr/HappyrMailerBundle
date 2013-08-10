@@ -87,15 +87,16 @@ class MailerService
 
 
         //send it
-        $failedRecipients=array();
+        $failedRecipients=null;
         try{
             $response=$this->mailer->send($message,$failedRecipients);
         }
         catch(\Exception $e){
+            $response=false;
             $this->handleError($e->getMessage());
         }
 
-        if(!$response){
+        if(!$response && is_array($failedRecipients)){
             $this->handleError('Could not sent emails to the following Recipeints: '.
                 implode(', ',$failedRecipients).'.');
         }
