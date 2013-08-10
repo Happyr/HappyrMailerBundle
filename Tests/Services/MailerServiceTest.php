@@ -75,10 +75,7 @@ class MailerServiceTest extends \PHPUnit_Framework_TestCase
     public function testSend()
     {
         $email='to@mail.se';
-        $params=array();
-
         $serviceParams=array('email'=>'test@from.se','name'=>'test', 'errorType'=>'exception');
-
 
         $mailer=new MailerService($this->getSwift(), $this->templ, $serviceParams);
         $mailer->send($email, $this->templName, array());
