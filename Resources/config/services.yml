@@ -1,7 +1,12 @@
 parameters:
-  happyr_mailer.user_class: HappyR\MailerBundle\Services\MailerService.php
+  happyr_mailer.user_class: HappyR\MailerBundle\Services\MailerService
 
 services:
   happyr.mailer:
     class: %happyr_mailer.user_class%
-    arguments: [@mailer,@templating,{'name':%happyr_mailer.from.name%,'email':%happyr_mailer.from.email%}]
+    arguments:
+      - @mailer
+      - @templating
+      - name: %happyr_mailer.from.name%
+        email: %happyr_mailer.from.email%
+        errorType: %happyr_mailer.error_type%

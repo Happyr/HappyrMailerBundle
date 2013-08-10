@@ -2,6 +2,7 @@
 
 namespace HappyR\MailerBundle\Services;
 
+use HappyR\MailerBundle\Exceptions\MailException;
 use Symfony\Bundle\FrameworkBundle\Templating\EngineInterface;
 use Symfony\Component\Routing\RouterInterface;
 use Swift_Mailer;
@@ -86,7 +87,53 @@ class MailerService
 
 
         //send it
-        return $this->mailer->send($message);
+        $failedRecipients=array();
+        try{
+            $response=$this->mailer->send($message,$failedRecipients);
+        }
+        catch(\Exception $e){
+            $this->handleError($e->getMessage());
+        }
+
+        if(!$response){
+            $this->handleError('Could not sent emails to the following Recipeints: '.
+                implode(', ',$failedRecipients).'.');
+        }
+
+        return $response;
+    }
+
+    /**
+     * Report errors according to the config
+     *
+     * @param $message
+     *
+     * @throws \HappyR\MailerBundle\Exceptions\MailException
+     */
+    protected function handleError($message)
+    {
+        if($this->parameters['errorType']=='none'){
+            return;
+        }
+
+        if($this->parameters['errorType']=='exception'){
+            throw new MailException($message);
+        }
+
+        //assert: We should trigger an error
+        switch($this->parameters['errorType']){
+            case 'error':
+                $errorConstant=E_USER_ERROR;
+                break;
+            case 'warning':
+                $errorConstant=E_USER_WARNING;
+                break;
+            case 'notice':
+                $errorConstant=E_USER_NOTICE;
+                break;
+        }
+
+        trigger_error($message, $errorConstant);
     }
 
     /**

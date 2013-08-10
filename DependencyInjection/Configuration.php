@@ -24,13 +24,20 @@ class Configuration implements ConfigurationInterface
 
         $rootNode
           ->children()
-            ->scalarNode('class')->defaultValue('HappyR\MailerBundle\Services\MailerService')->cannotBeEmpty()->end()
             ->arrayNode('from')
               ->addDefaultsIfNotSet()
               ->children()
                  ->scalarNode('email')->defaultValue('webmaster@example.com')->cannotBeEmpty()->end()
                  ->scalarNode('name')->defaultValue('webmaster')->cannotBeEmpty()->end()
               ->end()
+            ->end()
+            ->scalarNode('error_type')
+                ->defaultValue('exception')
+                ->validate()
+                    ->ifNotInArray(array('exception', 'error', 'warning', 'notice', 'none'))
+                    ->thenInvalid('Invalid error type "%s", must be "exception", "error", "warning", "notice" or "none".')
+                ->end()
+            ->end()
           ->end()
         ;
 

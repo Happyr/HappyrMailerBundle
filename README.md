@@ -104,7 +104,19 @@ If you want to send attachments you need to add them the the parameters array.
 
 ```
 
+Changelog
+---------
+**1.2.0**
+You will no logner get exceptions from switft. If you want to catch exceptions use
+HappyR\MailerBundle\Exceptions\MailException.
 
+You may now choose how error are handeled by using the error_tyoe config.
+``` yaml
+# app/config/config.yml
+
+happy_r_mailer:
+    error_type: 'exception' #other possible values are 'error', 'warning', 'notice' and 'none'
+```
 
 
 [1]: http://happyrecruiting.se
