@@ -35,7 +35,9 @@ class Configuration implements ConfigurationInterface
                 ->defaultValue('exception')
                 ->validate()
                     ->ifNotInArray(array('exception', 'error', 'warning', 'notice', 'none'))
-                    ->thenInvalid('Invalid error type "%s", must be "exception", "error", "warning", "notice" or "none".')
+                    ->thenInvalid(
+                        'Invalid error type "%s", must be "exception", "error", "warning", "notice" or "none".'
+                    )
                 ->end()
             ->end()
           ->end()

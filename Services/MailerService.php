@@ -106,7 +106,7 @@ class MailerService
     /**
      * Report errors according to the config
      *
-     * @param $message
+     * @param string $message
      *
      * @throws \HappyR\MailerBundle\Exceptions\MailException
      */
