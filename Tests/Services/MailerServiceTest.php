@@ -25,7 +25,7 @@ class MailerServiceTest extends \PHPUnit_Framework_TestCase
         $templName='myTemplate';
         $params=array();
 
-        $serviceParams=array('email'=>'test@from.se','name'=>'test');
+        $serviceParams=array('email'=>'test@from.se','name'=>'test', 'errorType'=>'exception');
 
         $templ=m::mock('Symfony\Bundle\FrameworkBundle\Templating\EngineInterface');
         $templ->shouldReceive('render')->once()->with($templName,$params)
@@ -34,7 +34,8 @@ class MailerServiceTest extends \PHPUnit_Framework_TestCase
         $swift=m::mock('Swift_Mailer');
         $swift->shouldReceive('send')->once()->with(m::on(function($message){
             return $message instanceof \Swift_Message;
-        }));
+        }),array())
+            ->andReturn(true);
 
         $mailer=new MailerService($swift,$templ,$serviceParams);
         $mailer->send($email,$templName,$params);
