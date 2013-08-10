@@ -111,6 +111,7 @@ You will no logner get exceptions from switft. If you want to catch exceptions u
 HappyR\MailerBundle\Exceptions\MailException.
 
 You may now choose how error are handeled by using the error_tyoe config.
+
 ``` yaml
 # app/config/config.yml
 
