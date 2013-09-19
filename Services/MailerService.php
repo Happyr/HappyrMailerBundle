@@ -50,6 +50,38 @@ class MailerService
     }
 
     /**
+     * Set a parameter value
+     *
+     * @param string $name
+     * @param string $value
+     *
+     * @return $this
+     */
+    public function setParameters($name, $value)
+    {
+        $this->parameters[$name] = $parameters;
+
+        return $this;
+    }
+
+    /**
+     *
+     * @param string $name
+     *
+     * @return mixed
+     */
+    public function getParameters($name)
+    {
+        if(isset($this->parameters[$name])){
+            return $this->parameters[$name];
+        }
+
+        return null;
+    }
+
+
+
+    /**
      * Send a message to $toEmail. Use the $template with the $parameters
      * @param String $toEmail
      * @param String $template
