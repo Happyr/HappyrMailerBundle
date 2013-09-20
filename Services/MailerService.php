@@ -59,7 +59,7 @@ class MailerService
      */
     public function setParameters($name, $value)
     {
-        $this->parameters[$name] = $parameters;
+        $this->parameters[$name] = $value;
 
         return $this;
     }
