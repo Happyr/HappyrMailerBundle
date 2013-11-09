@@ -23,7 +23,9 @@
         "mockery/mockery": "*"
     },
     "autoload": {
-        "psr-0": { "HappyR\\MailerBundle": "" }
+        "psr-0": {
+            "HappyR\\MailerBundle": ""
+        }
     },
     "target-dir": "HappyR/MailerBundle"
 

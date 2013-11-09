@@ -7,6 +7,7 @@ use Symfony\Bundle\FrameworkBundle\Templating\EngineInterface;
 use Symfony\Component\Routing\RouterInterface;
 use Swift_Mailer;
 use Swift_Attachment;
+
 /**
  * Class MailerService
  *
@@ -72,28 +73,28 @@ class MailerService
      */
     public function getParameters($name)
     {
-        if(isset($this->parameters[$name])){
+        if (isset($this->parameters[$name])) {
             return $this->parameters[$name];
         }
 
         return null;
     }
 
-
-
     /**
      * Send a message to $toEmail. Use the $template with the $parameters
+     *
      * @param String $toEmail
      * @param String $template
      * @param array $parameters
      *
      * @return integer
      */
-    public function send($toEmail, $template, array $parameters=array()){
+    public function send($toEmail, $template, array $parameters = array())
+    {
         //prepare attachments
-        $attachments=array();
-        if(isset($parameters['attachments']) && is_array($parameters['attachments'])){
-            $attachments=$parameters['attachments'];
+        $attachments = array();
+        if (isset($parameters['attachments']) && is_array($parameters['attachments'])) {
+            $attachments = $parameters['attachments'];
             unset($parameters['attachments']);
         }
 
@@ -107,30 +108,29 @@ class MailerService
         $subject = $renderedLines[0];
         $body = implode("\n", array_slice($renderedLines, 1));
 
-
         //Create the message
         $message = \Swift_Message::newInstance()
             ->setSubject($subject)
-            ->setFrom($this->parameters['email'],$this->parameters['name'])
+            ->setFrom($this->parameters['email'], $this->parameters['name'])
             ->setTo($toEmail)
-            ->setBody($body,'text/html','utf-8');
+            ->setBody($body, 'text/html', 'utf-8');
 
-        $this->prepareAttachments($message,$attachments);
-
+        $this->prepareAttachments($message, $attachments);
 
         //send it
-        $failedRecipients=null;
-        try{
-            $response=$this->mailer->send($message,$failedRecipients);
-        }
-        catch(\Exception $e){
-            $response=false;
+        $failedRecipients = null;
+        try {
+            $response = $this->mailer->send($message, $failedRecipients);
+        } catch (\Exception $e) {
+            $response = false;
             $this->handleError($e->getMessage());
         }
 
-        if(!$response && is_array($failedRecipients)){
-            $this->handleError('Could not sent emails to the following Recipeints: '.
-                implode(', ',$failedRecipients).'.');
+        if (!$response && is_array($failedRecipients)) {
+            $this->handleError(
+                'Could not sent emails to the following Recipeints: ' .
+                implode(', ', $failedRecipients) . '.'
+            );
         }
 
         return $response;
@@ -145,24 +145,24 @@ class MailerService
      */
     protected function handleError($message)
     {
-        if($this->parameters['errorType']=='none'){
+        if ($this->parameters['errorType'] == 'none') {
             return;
         }
 
-        if($this->parameters['errorType']=='exception'){
+        if ($this->parameters['errorType'] == 'exception') {
             throw new MailException($message);
         }
 
         //assert: We should trigger an error
-        switch($this->parameters['errorType']){
+        switch ($this->parameters['errorType']) {
             case 'error':
-                $errorConstant=E_USER_ERROR;
+                $errorConstant = E_USER_ERROR;
                 break;
             case 'warning':
-                $errorConstant=E_USER_WARNING;
+                $errorConstant = E_USER_WARNING;
                 break;
             case 'notice':
-                $errorConstant=E_USER_NOTICE;
+                $errorConstant = E_USER_NOTICE;
                 break;
         }
 
@@ -179,28 +179,30 @@ class MailerService
     protected function prepareAttachments(&$message, array &$attachments)
     {
         //prepare an array with defaults
-        $defaults=array(
-            'data'=>null,
-            'path'=>null,
-            'contentType'=>null,
-            'filename'=>null,
+        $defaults = array(
+            'data' => null,
+            'path' => null,
+            'contentType' => null,
+            'filename' => null,
         );
 
-
         //For each attachment
-        foreach($attachments as $key=>$file){
-            if(!is_array($file)){
-                trigger_error('HappyRMailerBundle: The way you add attachments are depricated. '.
-                'See http://developer.happyr.se how you should add attachments.', E_USER_DEPRECATED );
+        foreach ($attachments as $key => $file) {
+            if (!is_array($file)) {
+                trigger_error(
+                    'HappyRMailerBundle: The way you add attachments are depricated. ' .
+                    'See http://developer.happyr.se how you should add attachments.',
+                    E_USER_DEPRECATED
+                );
 
                 $message->attach(Swift_Attachment::fromPath($key, $file));
                 continue;
             }
 
-            $file=array_merge($defaults ,$file);
-            $attachment=new Swift_Attachment($file['data'],$file['filename'],$file['contentType']);
+            $file = array_merge($defaults, $file);
+            $attachment = new Swift_Attachment($file['data'], $file['filename'], $file['contentType']);
 
-            if($file['data']==null){
+            if ($file['data'] == null) {
                 //fetch from path
                 $attachment->setFile(
                     new \Swift_ByteStream_FileByteStream($file['path']),

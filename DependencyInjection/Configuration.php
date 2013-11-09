@@ -6,7 +6,6 @@ use Symfony\Component\Config\Definition\Builder\TreeBuilder;
 use Symfony\Component\Config\Definition\ConfigurationInterface;
 use Symfony\Component\Config\Definition\Builder\ArrayNodeDefinition;
 
-
 /**
  * This is the class that validates and merges configuration from your app/config files
  *
@@ -23,25 +22,24 @@ class Configuration implements ConfigurationInterface
         $rootNode = $treeBuilder->root('happy_r_mailer');
 
         $rootNode
-          ->children()
+            ->children()
             ->arrayNode('from')
-              ->addDefaultsIfNotSet()
-              ->children()
-                 ->scalarNode('email')->defaultValue('webmaster@example.com')->cannotBeEmpty()->end()
-                 ->scalarNode('name')->defaultValue('webmaster')->cannotBeEmpty()->end()
-              ->end()
+            ->addDefaultsIfNotSet()
+            ->children()
+            ->scalarNode('email')->defaultValue('webmaster@example.com')->cannotBeEmpty()->end()
+            ->scalarNode('name')->defaultValue('webmaster')->cannotBeEmpty()->end()
+            ->end()
             ->end()
             ->scalarNode('error_type')
-                ->defaultValue('exception')
-                ->validate()
-                    ->ifNotInArray(array('exception', 'error', 'warning', 'notice', 'none'))
-                    ->thenInvalid(
-                        'Invalid error type "%s", must be "exception", "error", "warning", "notice" or "none".'
-                    )
-                ->end()
+            ->defaultValue('exception')
+            ->validate()
+            ->ifNotInArray(array('exception', 'error', 'warning', 'notice', 'none'))
+            ->thenInvalid(
+                'Invalid error type "%s", must be "exception", "error", "warning", "notice" or "none".'
+            )
             ->end()
-          ->end()
-        ;
+            ->end()
+            ->end();
 
         return $treeBuilder;
     }

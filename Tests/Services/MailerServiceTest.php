@@ -22,15 +22,16 @@ class MailerServiceTest extends \PHPUnit_Framework_TestCase
      */
     public function setUp()
     {
-        $this->validSwiftMessage=m::on(
-            function($message){
+        $this->validSwiftMessage = m::on(
+            function ($message) {
                 return $message instanceof \Swift_Message;
-            });
+            }
+        );
 
-        $this->templName='myTemplate';
+        $this->templName = 'myTemplate';
 
-        $this->templ=m::mock('Symfony\Bundle\FrameworkBundle\Templating\EngineInterface')
-            ->shouldReceive('render')->once()->with($this->templName,array())
+        $this->templ = m::mock('Symfony\Bundle\FrameworkBundle\Templating\EngineInterface')
+            ->shouldReceive('render')->once()->with($this->templName, array())
             ->andReturn("subject\nBody\nmoreBody")
             ->getMock();
     }
@@ -74,10 +75,10 @@ class MailerServiceTest extends \PHPUnit_Framework_TestCase
      */
     public function testSend()
     {
-        $email='to@mail.se';
-        $serviceParams=array('email'=>'test@from.se','name'=>'test', 'errorType'=>'exception');
+        $email = 'to@mail.se';
+        $serviceParams = array('email' => 'test@from.se', 'name' => 'test', 'errorType' => 'exception');
 
-        $mailer=new MailerService($this->getSwift(), $this->templ, $serviceParams);
+        $mailer = new MailerService($this->getSwift(), $this->templ, $serviceParams);
         $mailer->send($email, $this->templName, array());
     }
 
@@ -90,12 +91,11 @@ class MailerServiceTest extends \PHPUnit_Framework_TestCase
      */
     public function testFailToSendException()
     {
-        $email='to@mail.se';
-        $serviceParams=array('email'=>'test@from.se','name'=>'test', 'errorType'=>'exception');
+        $email = 'to@mail.se';
+        $serviceParams = array('email' => 'test@from.se', 'name' => 'test', 'errorType' => 'exception');
 
-        $mailer=new MailerService($this->getFailSwift(), $this->templ, $serviceParams);
+        $mailer = new MailerService($this->getFailSwift(), $this->templ, $serviceParams);
         $mailer->send($email, $this->templName, array());
-
     }
 
     /**
@@ -107,12 +107,11 @@ class MailerServiceTest extends \PHPUnit_Framework_TestCase
      */
     public function testFailToSendExceptionError()
     {
-        $email='to@mail.se';
-        $serviceParams=array('email'=>'test@from.se','name'=>'test', 'errorType'=>'error');
+        $email = 'to@mail.se';
+        $serviceParams = array('email' => 'test@from.se', 'name' => 'test', 'errorType' => 'error');
 
-        $mailer=new MailerService($this->getFailSwift(), $this->templ, $serviceParams);
+        $mailer = new MailerService($this->getFailSwift(), $this->templ, $serviceParams);
         $mailer->send($email, $this->templName, array());
-
     }
 
     /**
@@ -124,12 +123,11 @@ class MailerServiceTest extends \PHPUnit_Framework_TestCase
      */
     public function testFailToSendExceptionWarning()
     {
-        $email='to@mail.se';
-        $serviceParams=array('email'=>'test@from.se','name'=>'test', 'errorType'=>'warning');
+        $email = 'to@mail.se';
+        $serviceParams = array('email' => 'test@from.se', 'name' => 'test', 'errorType' => 'warning');
 
-        $mailer=new MailerService($this->getFailSwift(), $this->templ, $serviceParams);
+        $mailer = new MailerService($this->getFailSwift(), $this->templ, $serviceParams);
         $mailer->send($email, $this->templName, array());
-
     }
 
     /**
@@ -141,12 +139,11 @@ class MailerServiceTest extends \PHPUnit_Framework_TestCase
      */
     public function testFailToSendExceptionNotice()
     {
-        $email='to@mail.se';
-        $serviceParams=array('email'=>'test@from.se','name'=>'test', 'errorType'=>'notice');
+        $email = 'to@mail.se';
+        $serviceParams = array('email' => 'test@from.se', 'name' => 'test', 'errorType' => 'notice');
 
-        $mailer=new MailerService($this->getFailSwift(), $this->templ, $serviceParams);
+        $mailer = new MailerService($this->getFailSwift(), $this->templ, $serviceParams);
         $mailer->send($email, $this->templName, array());
-
     }
 
     /**
@@ -156,11 +153,10 @@ class MailerServiceTest extends \PHPUnit_Framework_TestCase
      */
     public function testFailToSendNoErrors()
     {
-        $email='to@mail.se';
-        $serviceParams=array('email'=>'test@from.se','name'=>'test', 'errorType'=>'none');
+        $email = 'to@mail.se';
+        $serviceParams = array('email' => 'test@from.se', 'name' => 'test', 'errorType' => 'none');
 
-        $mailer=new MailerService($this->getFailSwift(), $this->templ, $serviceParams);
+        $mailer = new MailerService($this->getFailSwift(), $this->templ, $serviceParams);
         $mailer->send($email, $this->templName, array());
-
     }
 }
