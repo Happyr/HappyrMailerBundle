@@ -4,6 +4,9 @@ namespace HappyR\MailerBundle\Services;
 
 use HappyR\MailerBundle\Exceptions\MailException;
 use Symfony\Bundle\FrameworkBundle\Templating\EngineInterface;
+use Symfony\Component\DependencyInjection\ContainerInterface;
+use Symfony\Component\DependencyInjection\Exception\InactiveScopeException;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\RouterInterface;
 use Swift_Mailer;
 use Swift_Attachment;
@@ -37,16 +40,24 @@ class MailerService
     protected $parameters;
 
     /**
+     * @var \Symfony\Component\DependencyInjection\ContainerInterface container
+     *
+     */
+    protected $container;
+
+    /**
      * Constructor
      *
      * @param Swift_Mailer $mailer
      * @param EngineInterface $templating
+     * $param ContainerInterface $container
      * @param array $parameters
      */
-    public function __construct(Swift_Mailer $mailer, EngineInterface $templating, array $parameters)
+    public function __construct(Swift_Mailer $mailer, EngineInterface $templating, ContainerInterface $container, array $parameters)
     {
         $this->mailer = $mailer;
         $this->templating = $templating;
+        $this->container = $container;
         $this->parameters = $parameters;
     }
 
@@ -98,8 +109,25 @@ class MailerService
             unset($parameters['attachments']);
         }
 
+        /*
+         * Fake a request to be able to use assets in the email twigs
+         */
+        try {
+            if ($this->getParameters('fakeRequest')) {
+                $this->container->get('request');
+            }
+            $leaveScope=false;
+        } catch(InactiveScopeException $e) {
+            $this->container->enterScope('request');
+            $this->container->set('request', new Request(), 'request');
+            $leaveScope=true;
+        }
+
         //Render the template
         $renderedTemplate = $this->templating->render($template, $parameters);
+        if ($leaveScope) {
+            $this->container->leaveScope('request');
+        }
 
         /*
          * Use the first line as the subject, and the rest as the body

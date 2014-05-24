@@ -28,5 +28,6 @@ class HappyRMailerExtension extends Extension
         $container->setParameter('happyr_mailer.from.email', $config['from']['email']);
         $container->setParameter('happyr_mailer.from.name', $config['from']['name']);
         $container->setParameter('happyr_mailer.error_type', $config['error_type']);
+        $container->setParameter('happyr_mailer.fake_request', $config['fake_request']);
     }
 }
