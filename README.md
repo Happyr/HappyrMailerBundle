@@ -107,8 +107,8 @@ If you want to send attachments you need to add them the the parameters array.
 ## Send emails from Symfony command
 
 If you want to send emails from a Symfony2 command you are often getting errors like:
- ```"You cannot create a service ("request") of an inactive scope ("request")."```
- or ```"You cannot create a service ("templating") of an inactive scope ("request")."```
+ ```You cannot create a service ("request") of an inactive scope ("request").```
+ or ```You cannot create a service ("templating.helper.assets") of an inactive scope ("request").```
 
 The error occur because you don't have access to a Request object. This bundle help you to fake a Request object.
 You need to change some config:
