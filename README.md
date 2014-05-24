@@ -5,8 +5,8 @@ HappyR Mailer Bundle makes it easier to send HTML emails with your Symfony2 appl
 This bundle supports template rendering and sending attachments.
 
 
-What is HappyR?
----------------
+## What is HappyR?
+
 The HappyR namespace is developed by [HappyRecruiting][1]. We put some of our bundles here because we love to share.
 Since we use a lot of open source libraries and bundles in our application it feels natural to give back something.
 You will find all our Symfony2 bundles that we've created for the open source world at [developer.happyr.se][2]. You
@@ -15,8 +15,8 @@ will also find more documentation about each bundle and our API clients, WordPre
 
 
 
-Installation
-------------
+## Installation
+
 
 ### Step 1: Using Composer
 
@@ -70,8 +70,8 @@ happy_r_mailer:
 You find a the full configuration reference [here][3].
 
 
-Usage
------
+## Usage
+
 ``` php
 <?php
 // AnyController.php
@@ -104,8 +104,32 @@ If you want to send attachments you need to add them the the parameters array.
 
 ```
 
-Changelog
----------
+## Send emails from Symfony command
+
+If you want to send emails from a Symfony2 command you are often getting errors like:
+ ```"You cannot create a service ("request") of an inactive scope ("request")."```
+ or ```"You cannot create a service ("templating") of an inactive scope ("request")."```
+
+The error occur because you don't have access to a Request object. This bundle help you to fake a Request object.
+You need to change some config:
+
+``` yaml
+# app/config/config.yml
+
+happy_r_mailer:
+    fake_request: true #default value is false
+```
+
+If a request object does not exists we will help you to create it.
+
+
+## Changelog
+
+**1.3.0**
+It is not possible to send emails from a console command without getting errors like:
+"You cannot create a service ("request") of an inactive scope ("request")."
+
+
 **1.2.0**
 You will no logner get exceptions from switft. If you want to catch exceptions use
 HappyR\MailerBundle\Exceptions\MailException.
