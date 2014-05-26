@@ -30,6 +30,7 @@ class Configuration implements ConfigurationInterface
                     ->end()
             ->end()
             ->booleanNode('fake_request')->defaultFalse()->cannotBeEmpty()->end()
+            ->scalarNode('request_provider_service')->end()
             ->scalarNode('error_type')->defaultValue('exception')->validate()
                 ->ifNotInArray(array('exception', 'error', 'warning', 'notice', 'none'))
                 ->thenInvalid(

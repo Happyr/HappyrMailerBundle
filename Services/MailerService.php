@@ -3,6 +3,7 @@
 namespace HappyR\MailerBundle\Services;
 
 use HappyR\MailerBundle\Exceptions\MailException;
+use HappyR\MailerBundle\Provider\RequestProviderInterface;
 use Symfony\Bundle\FrameworkBundle\Templating\EngineInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\DependencyInjection\Exception\InactiveScopeException;
@@ -46,19 +47,30 @@ class MailerService
     protected $container;
 
     /**
-     * Constructor
+     * @var \HappyR\MailerBundle\Provider\RequestProviderInterface requestProvider
      *
+     */
+    protected $requestProvider;
+
+    /**
      * @param Swift_Mailer $mailer
      * @param EngineInterface $templating
-     * $param ContainerInterface $container
+     * @param ContainerInterface $container
+     * @param RequestProviderInterface $pri
      * @param array $parameters
      */
-    public function __construct(Swift_Mailer $mailer, EngineInterface $templating, ContainerInterface $container, array $parameters)
-    {
+    public function __construct(
+        Swift_Mailer $mailer,
+        EngineInterface $templating,
+        ContainerInterface $container,
+        RequestProviderInterface $rpi,
+        array $parameters
+    ) {
         $this->mailer = $mailer;
         $this->templating = $templating;
         $this->container = $container;
         $this->parameters = $parameters;
+        $this->requestProvider = $rpi;
     }
 
     /**
@@ -92,21 +104,21 @@ class MailerService
     }
 
     /**
-     * Send a message to $toEmail. Use the $template with the $parameters
+     * Send a message to $toEmail. Use the $template with the $data
      *
      * @param String $toEmail
      * @param String $template
-     * @param array $parameters
+     * @param array $data
      *
      * @return integer
      */
-    public function send($toEmail, $template, array $parameters = array())
+    public function send($toEmail, $template, array $data = array())
     {
         //prepare attachments
         $attachments = array();
-        if (isset($parameters['attachments']) && is_array($parameters['attachments'])) {
-            $attachments = $parameters['attachments'];
-            unset($parameters['attachments']);
+        if (isset($data['attachments']) && is_array($data['attachments'])) {
+            $attachments = $data['attachments'];
+            unset($data['attachments']);
         }
 
         /*
@@ -119,12 +131,12 @@ class MailerService
             $leaveScope=false;
         } catch(InactiveScopeException $e) {
             $this->container->enterScope('request');
-            $this->container->set('request', new Request(), 'request');
+            $this->container->set('request', $this->requestProvider->getRequest($toEmail, $data), 'request');
             $leaveScope=true;
         }
 
         //Render the template
-        $renderedTemplate = $this->templating->render($template, $parameters);
+        $renderedTemplate = $this->templating->render($template, $data);
         if ($leaveScope) {
             $this->container->leaveScope('request');
         }

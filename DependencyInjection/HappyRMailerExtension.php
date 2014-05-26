@@ -4,6 +4,7 @@ namespace HappyR\MailerBundle\DependencyInjection;
 
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\Config\FileLocator;
+use Symfony\Component\DependencyInjection\Reference;
 use Symfony\Component\HttpKernel\DependencyInjection\Extension;
 use Symfony\Component\DependencyInjection\Loader;
 
@@ -29,5 +30,11 @@ class HappyRMailerExtension extends Extension
         $container->setParameter('happyr_mailer.from.name', $config['from']['name']);
         $container->setParameter('happyr_mailer.error_type', $config['error_type']);
         $container->setParameter('happyr_mailer.fake_request', $config['fake_request']);
+
+        if (!empty($config['request_provider_service'])) {
+            $def = $container->getDefinition('happyr.mailer');
+            $def->replaceArgument(3, new Reference($config['request_provider_service']));
+        }
+
     }
 }
