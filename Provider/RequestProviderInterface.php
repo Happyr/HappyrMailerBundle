@@ -11,7 +11,7 @@ interface RequestProviderInterface
 {
     /**
      * Get a new HttpFoundation request. You may implement this request and make sure the request has the
-     * corrent init values. Like locale.
+     * correct init values. Like locale.
      *
      * @param $email
      * @param $tmplData
