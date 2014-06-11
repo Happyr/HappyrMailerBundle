@@ -8,7 +8,6 @@ use Symfony\Bundle\FrameworkBundle\Templating\EngineInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\DependencyInjection\Exception\InactiveScopeException;
 use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\Routing\RouterInterface;
 use Swift_Mailer;
 use Swift_Attachment;
 
@@ -253,5 +252,18 @@ class MailerService
             //add it to the mail
             $message->attach($attachment);
         }
+    }
+
+    /**
+     *
+     * @param \Swift_Mailer $mailer
+     *
+     * @return $this
+     */
+    public function setMailer(Swift_Mailer $mailer)
+    {
+        $this->mailer = $mailer;
+
+        return $this;
     }
 }
