@@ -125,7 +125,12 @@ class MailerService
          */
         try {
             if ($this->getParameters('fakeRequest')) {
-                $this->container->get('request');
+                $request=$this->container->get('request');
+
+                // if host = localhost we might want to try with a fake request
+                if ('localhost' == $request->getHost()) {
+                    throw new InactiveScopeException('foo', 'bar');
+                }
             }
             $leaveScope=false;
         } catch(InactiveScopeException $e) {
