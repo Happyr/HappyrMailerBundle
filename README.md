@@ -51,7 +51,7 @@ $bundles = array(
 ``` yaml
 # app/config/config.yml
 
-happy_r_mailer:
+happyr_mailer:
     // ...
     from:
         email: you@company.com
@@ -117,7 +117,7 @@ You need to change some config:
 ``` yaml
 # app/config/config.yml
 
-happy_r_mailer:
+happyr_mailer:
     fake_request: true #default value is false
 ```
 
@@ -140,7 +140,7 @@ You may now choose how error are handeled by using the error_tyoe config.
 ``` yaml
 # app/config/config.yml
 
-happy_r_mailer:
+happyr_mailer:
     error_type: 'exception' #other possible values are 'error', 'warning', 'notice' and 'none'
 ```
 
