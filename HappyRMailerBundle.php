@@ -1,6 +1,6 @@
 <?php
 
-namespace HappyR\MailerBundle;
+namespace Happyr\MailerBundle;
 
 use Symfony\Component\HttpKernel\Bundle\Bundle;
 
@@ -9,6 +9,6 @@ use Symfony\Component\HttpKernel\Bundle\Bundle;
  *
  * A bundle to to the final preparation before swift sends the mail
  */
-class HappyRMailerBundle extends Bundle
+class HappyrMailerBundle extends Bundle
 {
 }

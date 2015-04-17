@@ -1,6 +1,6 @@
 parameters:
-  happyr_mailer.user_class: HappyR\MailerBundle\Services\MailerService
-  happyr.mailer.provider.request.class: HappyR\MailerBundle\Provider\RequestProvider
+  happyr_mailer.user_class: Happyr\MailerBundle\Services\MailerService
+  happyr.mailer.provider.request.class: Happyr\MailerBundle\Provider\RequestProvider
 
 services:
   happyr.mailer:

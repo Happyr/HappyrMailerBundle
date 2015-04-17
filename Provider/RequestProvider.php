@@ -1,7 +1,7 @@
 <?php
 
 
-namespace HappyR\MailerBundle\Provider;
+namespace Happyr\MailerBundle\Provider;
 
 use Symfony\Component\HttpFoundation\Request;
 

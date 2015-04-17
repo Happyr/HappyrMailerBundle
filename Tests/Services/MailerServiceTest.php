@@ -1,8 +1,8 @@
 <?php
 
-namespace HappyR\MailerBundle\Tests\Services;
+namespace Happyr\MailerBundle\Tests\Services;
 
-use HappyR\MailerBundle\Services\MailerService;
+use Happyr\MailerBundle\Services\MailerService;
 use Mockery as m;
 
 /**
@@ -77,7 +77,7 @@ class MailerServiceTest extends \PHPUnit_Framework_TestCase
         $email = 'to@mail.se';
         $serviceParams = array('email' => 'test@from.se', 'name' => 'test', 'errorType' => 'exception');
         $container= m::mock('Symfony\Component\DependencyInjection\ContainerInterface');
-        $requestProvider= m::mock('HappyR\MailerBundle\Provider\RequestProviderInterface');
+        $requestProvider= m::mock('Happyr\MailerBundle\Provider\RequestProviderInterface');
 
         $mailer = new MailerService($this->getSwift(), $this->templ, $container, $requestProvider, $serviceParams);
         $mailer->send($email, $this->templName, array());

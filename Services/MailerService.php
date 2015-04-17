@@ -1,9 +1,9 @@
 <?php
 
-namespace HappyR\MailerBundle\Services;
+namespace Happyr\MailerBundle\Services;
 
-use HappyR\MailerBundle\Exceptions\MailException;
-use HappyR\MailerBundle\Provider\RequestProviderInterface;
+use Happyr\MailerBundle\Exceptions\MailException;
+use Happyr\MailerBundle\Provider\RequestProviderInterface;
 use Symfony\Bundle\FrameworkBundle\Templating\EngineInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\DependencyInjection\Exception\InactiveScopeException;
@@ -46,7 +46,7 @@ class MailerService
     protected $container;
 
     /**
-     * @var \HappyR\MailerBundle\Provider\RequestProviderInterface requestProvider
+     * @var \Happyr\MailerBundle\Provider\RequestProviderInterface requestProvider
      *
      */
     protected $requestProvider;
@@ -196,7 +196,7 @@ class MailerService
      *
      * @param string $message
      *
-     * @throws \HappyR\MailerBundle\Exceptions\MailException
+     * @throws \Happyr\MailerBundle\Exceptions\MailException
      */
     protected function handleError($message)
     {

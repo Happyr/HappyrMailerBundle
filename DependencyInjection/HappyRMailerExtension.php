@@ -1,6 +1,6 @@
 <?php
 
-namespace HappyR\MailerBundle\DependencyInjection;
+namespace Happyr\MailerBundle\DependencyInjection;
 
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\Config\FileLocator;
@@ -13,7 +13,7 @@ use Symfony\Component\DependencyInjection\Loader;
  *
  * To learn more see {@link http://symfony.com/doc/current/cookbook/bundles/extension.html}
  */
-class HappyRMailerExtension extends Extension
+class HappyrMailerExtension extends Extension
 {
     /**
      * {@inheritDoc}

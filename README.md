@@ -50,7 +50,7 @@ $ php composer.phar update
 // in AppKernel::registerBundles()
 $bundles = array(
     // ...
-    new HappyR\MailerBundle\HappyRMailerBundle(),
+    new Happyr\MailerBundle\HappyRMailerBundle(),
     // ...
 );
 ```
@@ -142,7 +142,7 @@ It is not possible to send emails from a console command without getting errors 
 
 **1.2.0**
 You will no logner get exceptions from switft. If you want to catch exceptions use
-HappyR\MailerBundle\Exceptions\MailException.
+Happyr\MailerBundle\Exceptions\MailException.
 
 You may now choose how error are handeled by using the error_tyoe config.
 
