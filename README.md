@@ -1,17 +1,8 @@
-HappyR Mailer Bundle
+Happyr Mailer Bundle
 ==================================
 
-HappyR Mailer Bundle makes it easier to send HTML emails with your Symfony2 application.
+Happyr Mailer Bundle makes it easier to send HTML emails with your Symfony2 application.
 This bundle supports template rendering and sending attachments.
-
-
-## What is HappyR?
-
-The HappyR namespace is developed by [HappyRecruiting][1]. We put some of our bundles here because we love to share.
-Since we use a lot of open source libraries and bundles in our application it feels natural to give back something.
-You will find all our Symfony2 bundles that we've created for the open source world at [developer.happyr.se][2]. You
-will also find more documentation about each bundle and our API clients, WordPress plugins and more.
-
 
 
 
@@ -50,7 +41,7 @@ $ php composer.phar update
 // in AppKernel::registerBundles()
 $bundles = array(
     // ...
-    new HappyR\MailerBundle\HappyRMailerBundle(),
+    new Happyr\MailerBundle\HappyrMailerBundle(),
     // ...
 );
 ```
@@ -104,6 +95,16 @@ If you want to send attachments you need to add them the the parameters array.
 
 ```
 
+**Attachments:**
+You can add extra headers on the message if you like
+``` php
+    $this->send($mail, $template, array('user'=>$user, 'message_headers'=>
+	array(
+		'X-Mailgun-Variables' => json_encode(['foobar'=>'baz'])		
+	)));
+
+```
+
 ## Send emails from Symfony command
 
 If you want to send emails from a Symfony2 command you are often getting errors like:
@@ -132,7 +133,7 @@ It is not possible to send emails from a console command without getting errors 
 
 **1.2.0**
 You will no logner get exceptions from switft. If you want to catch exceptions use
-HappyR\MailerBundle\Exceptions\MailException.
+Happyr\MailerBundle\Exceptions\MailException.
 
 You may now choose how error are handeled by using the error_tyoe config.
 
