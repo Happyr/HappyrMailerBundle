@@ -12,7 +12,7 @@ use Swift_Mailer;
 use Swift_Attachment;
 
 /**
- * Class MailerService
+ * Class MailerService.
  *
  * This mailer renders a template and send the email
  */
@@ -20,43 +20,35 @@ class MailerService
 {
     /**
      * @var \Swift_Mailer mailer
-     *
-     *
      */
     protected $mailer;
 
     /**
      * @var \Symfony\Bundle\FrameworkBundle\Templating\EngineInterface templating
-     *
-     *
      */
     protected $templating;
 
     /**
      * @var array parameters
-     *
-     *
      */
     protected $parameters;
 
     /**
      * @var \Symfony\Component\DependencyInjection\ContainerInterface container
-     *
      */
     protected $container;
 
     /**
      * @var \Happyr\MailerBundle\Provider\RequestProviderInterface requestProvider
-     *
      */
     protected $requestProvider;
 
     /**
-     * @param Swift_Mailer $mailer
-     * @param EngineInterface $templating
-     * @param ContainerInterface $container
+     * @param Swift_Mailer             $mailer
+     * @param EngineInterface          $templating
+     * @param ContainerInterface       $container
      * @param RequestProviderInterface $pri
-     * @param array $parameters
+     * @param array                    $parameters
      */
     public function __construct(
         Swift_Mailer $mailer,
@@ -73,7 +65,7 @@ class MailerService
     }
 
     /**
-     * Set a parameter value
+     * Set a parameter value.
      *
      * @param string $name
      * @param string $value
@@ -88,7 +80,6 @@ class MailerService
     }
 
     /**
-     *
      * @param string $name
      *
      * @return mixed
@@ -99,15 +90,15 @@ class MailerService
             return $this->parameters[$name];
         }
 
-        return null;
+        return;
     }
 
     /**
-     * Send a message to $toEmail. Use the $template with the $data
+     * Send a message to $toEmail. Use the $template with the $data.
      *
      * @param String $toEmail
      * @param String $template
-     * @param array $data
+     * @param array  $data
      *
      * @return integer
      */
@@ -131,18 +122,18 @@ class MailerService
          */
         try {
             if ($this->getParameters('fakeRequest')) {
-                $request=$this->container->get('request');
+                $request = $this->container->get('request');
 
                 // if host = localhost we might want to try with a fake request
                 if ('localhost' == $request->getHost()) {
                     throw new InactiveScopeException('foo', 'bar');
                 }
             }
-            $leaveScope=false;
-        } catch(InactiveScopeException $e) {
+            $leaveScope = false;
+        } catch (InactiveScopeException $e) {
             $this->container->enterScope('request');
             $this->container->set('request', $this->requestProvider->getRequest($toEmail, $data), 'request');
-            $leaveScope=true;
+            $leaveScope = true;
         }
 
         //Render the template
@@ -166,7 +157,7 @@ class MailerService
             ->setBody($body, 'text/html', 'utf-8');
 
         $headers = $message->getHeaders();
-        foreach($headersToAdd as $name => $value) {
+        foreach ($headersToAdd as $name => $value) {
             $headers->addTextHeader($name, $value);
         }
 
@@ -183,8 +174,8 @@ class MailerService
 
         if (!$response && is_array($failedRecipients)) {
             $this->handleError(
-                'Could not sent emails to the following Recipeints: ' .
-                implode(', ', $failedRecipients) . '.'
+                'Could not sent emails to the following Recipeints: '.
+                implode(', ', $failedRecipients).'.'
             );
         }
 
@@ -192,7 +183,7 @@ class MailerService
     }
 
     /**
-     * Report errors according to the config
+     * Report errors according to the config.
      *
      * @param string $message
      *
@@ -225,11 +216,10 @@ class MailerService
     }
 
     /**
-     * Prepare the attachments and add those to the message
+     * Prepare the attachments and add those to the message.
      *
      * @param Swift_Message &$message
-     * @param array &$attachments
-     *
+     * @param array         &$attachments
      */
     protected function prepareAttachments(&$message, array &$attachments)
     {
@@ -245,7 +235,7 @@ class MailerService
         foreach ($attachments as $key => $file) {
             if (!is_array($file)) {
                 trigger_error(
-                    'HappyRMailerBundle: The way you add attachments are depricated. ' .
+                    'HappyRMailerBundle: The way you add attachments are depricated. '.
                     'See http://developer.happyr.se how you should add attachments.',
                     E_USER_DEPRECATED
                 );
@@ -271,7 +261,6 @@ class MailerService
     }
 
     /**
-     *
      * @param \Swift_Mailer $mailer
      *
      * @return $this

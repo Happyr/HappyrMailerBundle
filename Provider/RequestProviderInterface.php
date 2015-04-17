@@ -2,10 +2,9 @@
 namespace Happyr\MailerBundle\Provider;
 
 /**
- * Class RequestProvider
+ * Class RequestProvider.
  *
  * @author Tobias Nyholm
- *
  */
 interface RequestProviderInterface
 {
