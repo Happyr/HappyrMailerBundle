@@ -104,6 +104,16 @@ If you want to send attachments you need to add them the the parameters array.
 
 ```
 
+**Attachments:**
+You can add extra headers on the message if you like
+``` php
+    $this->send($mail, $template, array('user'=>$user, 'message_headers'=>
+	array(
+		'X-Mailgun-Variables' => json_encode(['foobar'=>'baz'])		
+	)));
+
+```
+
 ## Send emails from Symfony command
 
 If you want to send emails from a Symfony2 command you are often getting errors like:
