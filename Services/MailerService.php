@@ -120,6 +120,12 @@ class MailerService
             unset($data['attachments']);
         }
 
+        $headersToAdd = array();
+        if (isset($data['message_headers']) && is_array($data['message_headers'])) {
+            $headersToAdd = $data['message_headers'];
+            unset($data['message_headers']);
+        }
+
         /*
          * Fake a request to be able to use assets in the email twigs
          */
@@ -158,6 +164,11 @@ class MailerService
             ->setFrom($this->parameters['email'], $this->parameters['name'])
             ->setTo($toEmail)
             ->setBody($body, 'text/html', 'utf-8');
+
+        $headers = $message->getHeaders();
+        foreach($headersToAdd as $name => $value) {
+            $headers->addTextHeader($name, $value);
+        }
 
         $this->prepareAttachments($message, $attachments);
 
