@@ -218,10 +218,10 @@ class MailerService
     /**
      * Prepare the attachments and add those to the message.
      *
-     * @param Swift_Message &$message
+     * @param \Swift_Message $message
      * @param array         &$attachments
      */
-    protected function prepareAttachments(&$message, array &$attachments)
+    protected function prepareAttachments(\Swift_Message $message, array &$attachments)
     {
         //prepare an array with defaults
         $defaults = array(
@@ -235,7 +235,7 @@ class MailerService
         foreach ($attachments as $key => $file) {
             if (!is_array($file)) {
                 trigger_error(
-                    'HappyRMailerBundle: The way you add attachments are depricated. '.
+                    'HappyrMailerBundle: The way you add attachments are deprecated. '.
                     'See http://developer.happyr.se how you should add attachments.',
                     E_USER_DEPRECATED
                 );
@@ -261,7 +261,7 @@ class MailerService
     }
 
     /**
-     * @param \Swift_Mailer $mailer
+     * @param Swift_Mailer $mailer
      *
      * @return $this
      */
