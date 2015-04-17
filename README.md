@@ -95,7 +95,7 @@ If you want to send attachments you need to add them the the parameters array.
 
 ```
 
-**Attachments:**
+**Message headers:**
 You can add extra headers on the message if you like
 ``` php
     $this->send($mail, $template, array('user'=>$user, 'message_headers'=>
