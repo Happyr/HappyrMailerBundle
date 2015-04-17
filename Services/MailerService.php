@@ -233,17 +233,6 @@ class MailerService
 
         //For each attachment
         foreach ($attachments as $key => $file) {
-            if (!is_array($file)) {
-                trigger_error(
-                    'HappyrMailerBundle: The way you add attachments are deprecated. '.
-                    'See http://developer.happyr.se how you should add attachments.',
-                    E_USER_DEPRECATED
-                );
-
-                $message->attach(Swift_Attachment::fromPath($key, $file));
-                continue;
-            }
-
             $file = array_merge($defaults, $file);
             $attachment = new Swift_Attachment($file['data'], $file['filename'], $file['contentType']);
 
