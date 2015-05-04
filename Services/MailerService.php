@@ -242,6 +242,9 @@ class MailerService
                     new \Swift_ByteStream_FileByteStream($file['path']),
                     $file['contentType']
                 );
+                if ($file['filename'] !== null) {
+                    $attachment->setFilename($file['filename']);
+                }
             }
 
             //add it to the mail
