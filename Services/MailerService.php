@@ -158,7 +158,13 @@ class MailerService
 
         $headers = $message->getHeaders();
         foreach ($headersToAdd as $name => $value) {
-            $headers->addTextHeader($name, $value);
+            if (!is_array($value)) {
+                $headers->addTextHeader($name, $value);
+            } else {
+                foreach ($value as $v) {
+                    $headers->addTextHeader($name, $v);
+                }
+            }
         }
 
         $this->prepareAttachments($message, $attachments);
