@@ -26,7 +26,7 @@ class Configuration implements ConfigurationInterface
                         ->scalarNode('name')->defaultValue('webmaster')->cannotBeEmpty()->end()
                     ->end()
             ->end()
-            ->booleanNode('fake_request')->defaultFalse()->cannotBeEmpty()->end()
+            ->booleanNode('fake_request')->defaultFalse()->end()
             ->scalarNode('request_provider_service')->end()
             ->scalarNode('error_type')->defaultValue('exception')->validate()
                 ->ifNotInArray(array('exception', 'error', 'warning', 'notice', 'none'))
