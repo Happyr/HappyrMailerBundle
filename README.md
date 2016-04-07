@@ -13,22 +13,8 @@ This bundle supports template rendering and sending attachments.
 
 Install it with Composer!
 
-```js
-// composer.json
-{
-    // ...
-    require: {
-        // ...
-        "happyr/mailer-bundle": "1.2.*",
-    }
-}
-```
-
-Then, you can install the new dependencies by running Composer's ``update``
-command from the directory where your ``composer.json`` file is located:
-
 ```bash
-$ php composer.phar update
+composer require happyr/mailer-bundle
 ```
 
 ### Step 2: Register the bundle
