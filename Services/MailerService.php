@@ -120,27 +120,20 @@ class MailerService
         /*
          * Fake a request to be able to use assets in the email twigs
          */
-        try {
-            if ($this->getParameters('fakeRequest')) {
-                $request = $this->container->get('request');
-
-                // if host = localhost we might want to try with a fake request
-                if ('localhost' == $request->getHost()) {
-                    throw new InactiveScopeException('foo', 'bar');
-                }
+        $translator = $this->container->get('translator');
+        $orgLocale = $translator->getLocale();
+        if ($this->getParameters('fakeRequest')) {
+            $requestStack = $this->container->get('request_stack');
+            if (null === $request = $requestStack->getMasterRequest()) {
+                /** @var Request $request */
+                $request = $this->requestProvider->getRequest($toEmail, $data);
+                $translator->setLocale($request->getLocale());
             }
-            $leaveScope = false;
-        } catch (InactiveScopeException $e) {
-            $this->container->enterScope('request');
-            $this->container->set('request', $this->requestProvider->getRequest($toEmail, $data), 'request');
-            $leaveScope = true;
         }
 
         //Render the template
         $renderedTemplate = $this->templating->render($template, $data);
-        if ($leaveScope) {
-            $this->container->leaveScope('request');
-        }
+        $translator->setLocale($orgLocale);
 
         /*
          * Use the first line as the subject, and the rest as the body
