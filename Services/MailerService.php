@@ -126,7 +126,7 @@ class MailerService
             $requestStack = $this->container->get('request_stack');
             if (null === $request = $requestStack->getMasterRequest()) {
                 /** @var Request $request */
-                $request = $this->requestProvider->getRequest($toEmail, $data);
+                $request = $this->requestProvider->getRequest($toEmail, array_merge(['_original_locale'=>$orgLocale], $data));
                 $translator->setLocale($request->getLocale());
             }
         }
