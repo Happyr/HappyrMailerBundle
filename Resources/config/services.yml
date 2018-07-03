@@ -8,7 +8,8 @@ services:
     arguments:
       - "@mailer"
       - "@templating"
-      - "@service_container"
+      - "@translator"
+      - "@request_stack"
       - "@happyr.mailer.provider.request"
       - name: "%happyr_mailer.from.name%"
         email: "%happyr_mailer.from.email%"

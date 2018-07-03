@@ -1,4 +1,5 @@
 <?php
+
 namespace Happyr\MailerBundle\Provider;
 
 /**

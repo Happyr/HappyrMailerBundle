@@ -12,19 +12,20 @@
         }
     ],
     "require": {
-        "php": "^5.6 || ^7.0",
-        "twig/twig": "^1.24 || ^2.0",
-        "swiftmailer/swiftmailer": "^5.4",
-        "symfony/yaml": "^2.7|^3.0"
+        "php": "^7.1",
+        "twig/twig": "^2.4.8",
+        "swiftmailer/swiftmailer": "^5.4 || ^6.0",
+        "symfony/yaml": "^3.4 || ^4.0",
+        "symfony/http-foundation": "^3.4 || ^4.0",
+        "symfony/translation": "^3.4 || ^4.0"
     },
     "require-dev": {
-        "mockery/mockery": "*"
+        "mockery/mockery": "1.1",
+        "phpunit/phpunit": "^6.5.9"
     },
     "autoload": {
-        "psr-0": {
-            "Happyr\\MailerBundle": ""
+        "psr-4": {
+            "Happyr\\MailerBundle\\": ""
         }
-    },
-    "target-dir": "Happyr/MailerBundle"
-
+    }
 }

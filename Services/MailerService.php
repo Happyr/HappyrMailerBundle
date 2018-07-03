@@ -4,17 +4,15 @@ namespace Happyr\MailerBundle\Services;
 
 use Happyr\MailerBundle\Exceptions\MailException;
 use Happyr\MailerBundle\Provider\RequestProviderInterface;
-use Symfony\Bundle\FrameworkBundle\Templating\EngineInterface;
-use Symfony\Component\DependencyInjection\ContainerInterface;
-use Symfony\Component\DependencyInjection\Exception\InactiveScopeException;
-use Symfony\Component\HttpFoundation\Request;
-use Swift_Mailer;
 use Swift_Attachment;
+use Swift_Mailer;
+use Symfony\Bundle\FrameworkBundle\Templating\EngineInterface;
+use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\RequestStack;
+use Symfony\Component\Translation\TranslatorInterface;
 
 /**
- * Class MailerService.
- *
- * This mailer renders a template and send the email
+ * This mailer renders a template and send the email.
  */
 class MailerService
 {
@@ -34,34 +32,34 @@ class MailerService
     protected $parameters;
 
     /**
-     * @var \Symfony\Component\DependencyInjection\ContainerInterface container
+     * @var RequestStack
      */
-    protected $container;
+    protected $requestStack;
+
+    /**
+     * @var TranslatorInterface
+     */
+    protected $translator;
 
     /**
      * @var \Happyr\MailerBundle\Provider\RequestProviderInterface requestProvider
      */
     protected $requestProvider;
 
-    /**
-     * @param Swift_Mailer             $mailer
-     * @param EngineInterface          $templating
-     * @param ContainerInterface       $container
-     * @param RequestProviderInterface $pri
-     * @param array                    $parameters
-     */
     public function __construct(
         Swift_Mailer $mailer,
         EngineInterface $templating,
-        ContainerInterface $container,
+        TranslatorInterface $translator,
+        RequestStack $requestStack,
         RequestProviderInterface $rpi,
         array $parameters
     ) {
         $this->mailer = $mailer;
         $this->templating = $templating;
-        $this->container = $container;
-        $this->parameters = $parameters;
+        $this->requestStack = $requestStack;
+        $this->translator = $translator;
         $this->requestProvider = $rpi;
+        $this->parameters = $parameters;
     }
 
     /**
@@ -96,55 +94,54 @@ class MailerService
     /**
      * Send a message to $toEmail. Use the $template with the $data.
      *
-     * @param String $toEmail
-     * @param String $template
+     * @param string $toEmail
+     * @param string $template
      * @param array  $data
      *
-     * @return integer
+     * @return int
      */
-    public function send($toEmail, $template, array $data = array())
+    public function send($toEmail, $template, array $data = [])
     {
         //prepare attachments
-        $attachments = array();
+        $attachments = [];
         if (isset($data['attachments']) && is_array($data['attachments'])) {
             $attachments = $data['attachments'];
             unset($data['attachments']);
         }
 
-        $headersToAdd = array();
+        $headersToAdd = [];
         if (isset($data['message_headers']) && is_array($data['message_headers'])) {
             $headersToAdd = $data['message_headers'];
             unset($data['message_headers']);
         }
 
-        /*
-         * Fake a request to be able to use assets in the email twigs
-         */
-        $translator = $this->container->get('translator');
-        $orgLocale = $translator->getLocale();
+        // Fake a request to be able to use assets in the email twigs
+        $orgLocale = $this->translator->getLocale();
         if ($this->getParameters('fakeRequest')) {
-            $requestStack = $this->container->get('request_stack');
-            if (null === $request = $requestStack->getMasterRequest()) {
+            if (null === $request = $this->requestStack->getMasterRequest()) {
                 /** @var Request $request */
-                $request = $this->requestProvider->getRequest($toEmail, array_merge(['_original_locale'=>$orgLocale], $data));
-                $translator->setLocale($request->getLocale());
+                $request = $this->requestProvider->getRequest($toEmail, array_merge(['_original_locale' => $orgLocale], $data));
+                $this->translator->setLocale($request->getLocale());
             }
         }
 
         //Render the template
         $renderedTemplate = $this->templating->render($template, $data);
-        $translator->setLocale($orgLocale);
+        $this->translator->setLocale($orgLocale);
 
-        /*
-         * Use the first line as the subject, and the rest as the body
-         */
+        // Use the first line as the subject, and the rest as the body
         $renderedLines = explode("\n", trim($renderedTemplate));
         $subject = $renderedLines[0];
         $body = implode("\n", array_slice($renderedLines, 1));
 
         //Create the message
-        $message = \Swift_Message::newInstance()
-            ->setSubject($subject)
+        if (method_exists(\Swift_Message::class, 'newInstance')) {
+            $message = \Swift_Message::newInstance();
+        } else {
+            $message = new \Swift_Message($subject);
+        }
+
+        $message->setSubject($subject)
             ->setFrom($this->parameters['email'], $this->parameters['name'])
             ->setTo($toEmail)
             ->setBody($body, 'text/html', 'utf-8');
@@ -182,6 +179,18 @@ class MailerService
     }
 
     /**
+     * @param Swift_Mailer $mailer
+     *
+     * @return $this
+     */
+    public function setMailer(Swift_Mailer $mailer)
+    {
+        $this->mailer = $mailer;
+
+        return $this;
+    }
+
+    /**
      * Report errors according to the config.
      *
      * @param string $message
@@ -190,11 +199,11 @@ class MailerService
      */
     protected function handleError($message)
     {
-        if ($this->parameters['errorType'] == 'none') {
+        if ('none' == $this->parameters['errorType']) {
             return;
         }
 
-        if ($this->parameters['errorType'] == 'exception') {
+        if ('exception' == $this->parameters['errorType']) {
             throw new MailException($message);
         }
 
@@ -218,30 +227,30 @@ class MailerService
      * Prepare the attachments and add those to the message.
      *
      * @param \Swift_Message $message
-     * @param array         &$attachments
+     * @param array          &$attachments
      */
     protected function prepareAttachments(\Swift_Message $message, array &$attachments)
     {
         //prepare an array with defaults
-        $defaults = array(
+        $defaults = [
             'data' => null,
             'path' => null,
             'contentType' => null,
             'filename' => null,
-        );
+        ];
 
         //For each attachment
         foreach ($attachments as $key => $file) {
             $file = array_merge($defaults, $file);
             $attachment = new Swift_Attachment($file['data'], $file['filename'], $file['contentType']);
 
-            if ($file['data'] == null) {
+            if (null == $file['data']) {
                 //fetch from path
                 $attachment->setFile(
                     new \Swift_ByteStream_FileByteStream($file['path']),
                     $file['contentType']
                 );
-                if ($file['filename'] !== null) {
+                if (null !== $file['filename']) {
                     $attachment->setFilename($file['filename']);
                 }
             }
@@ -249,17 +258,5 @@ class MailerService
             //add it to the mail
             $message->attach($attachment);
         }
-    }
-
-    /**
-     * @param Swift_Mailer $mailer
-     *
-     * @return $this
-     */
-    public function setMailer(Swift_Mailer $mailer)
-    {
-        $this->mailer = $mailer;
-
-        return $this;
     }
 }

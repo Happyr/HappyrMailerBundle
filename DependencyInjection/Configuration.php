@@ -10,9 +10,6 @@ use Symfony\Component\Config\Definition\ConfigurationInterface;
  */
 class Configuration implements ConfigurationInterface
 {
-    /**
-     * {@inheritDoc}
-     */
     public function getConfigTreeBuilder()
     {
         $treeBuilder = new TreeBuilder();
@@ -29,7 +26,7 @@ class Configuration implements ConfigurationInterface
             ->booleanNode('fake_request')->defaultFalse()->end()
             ->scalarNode('request_provider_service')->end()
             ->scalarNode('error_type')->defaultValue('exception')->validate()
-                ->ifNotInArray(array('exception', 'error', 'warning', 'notice', 'none'))
+                ->ifNotInArray(['exception', 'error', 'warning', 'notice', 'none'])
                 ->thenInvalid(
                     'Invalid error type "%s", must be "exception", "error", "warning", "notice" or "none".'
                 )->end()
