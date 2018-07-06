@@ -30,7 +30,7 @@ class HappyrMailerExtension extends Extension
 
         if (!empty($config['request_provider_service'])) {
             $def = $container->getDefinition('happyr.mailer');
-            $def->replaceArgument(3, new Reference($config['request_provider_service']));
+            $def->replaceArgument(4, new Reference($config['request_provider_service']));
         }
     }
 }

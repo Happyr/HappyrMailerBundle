@@ -11,7 +11,8 @@ services:
       - "@translator"
       - "@request_stack"
       - "@happyr.mailer.provider.request"
-      - name: "%happyr_mailer.from.name%"
+      -
+        name: "%happyr_mailer.from.name%"
         email: "%happyr_mailer.from.email%"
         errorType: "%happyr_mailer.error_type%"
         fakeRequest: "%happyr_mailer.fake_request%"
