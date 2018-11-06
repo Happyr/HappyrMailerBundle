@@ -19,3 +19,9 @@ services:
 
   happyr.mailer.provider.request:
     class: "%happyr.mailer.provider.request.class%"
+
+  Happyr\MailerBundle\Provider\RequestProviderInterface:
+    alias: happyr.mailer.provider.request
+
+  Happyr\MailerBundle\Services\MailerService:
+    alias: happyr.mailer
